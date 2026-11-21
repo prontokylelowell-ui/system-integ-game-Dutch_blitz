@@ -17,8 +17,18 @@
     MAX_PLAYERS: 4
   };
 
+  /* The shared centre holds this many Dutch piles for each colour, so cards
+     of the same value (two 1s, say) can start separate piles. */
+  var PILES_PER_COLOR = 3;
+
   function emptyDutch() {
-    return { red: [], blue: [], green: [], yellow: [] };
+    var piles = [];
+    Cards.COLORS.forEach(function (color) {
+      for (var i = 0; i < PILES_PER_COLOR; i++) {
+        piles.push({ color: color, cards: [] });
+      }
+    });
+    return piles;
   }
 
   function makePlayer(index, name, isHuman) {
@@ -116,9 +126,10 @@
     if (!card) return { ok: false, card: null, blitz: false };
 
     if (move.kind === 'dutch') {
-      if (!Rules.canPlayToDutch(game, card)) return { ok: false, card: null, blitz: false };
+      var pileIndex = Rules.findDutchPile(game, card);
+      if (pileIndex < 0) return { ok: false, card: null, blitz: false };
       removeFromSource(game, playerIndex, move.from);
-      game.dutch[card.color].push(card);
+      game.dutch[pileIndex].cards.push(card);
       game.progressAt = Date.now();
 
       if (move.from.type === 'blitz' && player.blitz.length === 0) {
@@ -147,8 +158,8 @@
   /* Count how many of a player's own cards made it into the Dutch piles. */
   function cardsOnDutch(game, playerIndex) {
     var total = 0;
-    Cards.COLORS.forEach(function (color) {
-      game.dutch[color].forEach(function (card) {
+    game.dutch.forEach(function (pile) {
+      pile.cards.forEach(function (card) {
         if (card.owner === playerIndex) total++;
       });
     });

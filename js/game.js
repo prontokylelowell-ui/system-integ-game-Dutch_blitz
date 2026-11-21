@@ -70,31 +70,38 @@
     var host = $('dutch-row');
     host.innerHTML = '';
     Cards.COLORS.forEach(function (color) {
-      var pile = game.dutch[color];
-      var box = el('div', 'dutch-pile d-' + color);
-      var cardsHost = el('div', 'pile-cards');
+      var group = el('div', 'dutch-group d-' + color);
+      var piles = el('div', 'dutch-group-piles');
 
-      if (pile.length) {
-        cardsHost.appendChild(Cards.renderCard(pile[pile.length - 1], {
-          size: 'md',
-          label: Cards.COLOR_LABEL[color] + ' pile'
-        }));
-        cardsHost.appendChild(el('span', 'pile-badge', pile.length + '/10'));
-        if (pile.length === 10) box.classList.add('is-complete');
-      } else {
-        cardsHost.appendChild(Cards.renderSlot('1', 'md'));
-      }
-      box.appendChild(cardsHost);
-      box.appendChild(el('div', 'pile-label', Cards.COLOR_LABEL[color]));
+      game.dutch.forEach(function (pile) {
+        if (pile.color !== color) return;
+        var box = el('div', 'dutch-pile');
+        var cardsHost = el('div', 'pile-cards');
 
-      /* progress ticks */
-      var ticks = el('div', 'dutch-ticks');
-      for (var i = 1; i <= 10; i++) {
-        ticks.appendChild(el('span', 'tick' + (i <= pile.length ? ' on' : '')));
-      }
-      box.appendChild(ticks);
+        if (pile.cards.length) {
+          cardsHost.appendChild(Cards.renderCard(pile.cards[pile.cards.length - 1], {
+            size: 'md',
+            label: Cards.COLOR_LABEL[color] + ' pile'
+          }));
+          cardsHost.appendChild(el('span', 'pile-badge', pile.cards.length + '/10'));
+          if (pile.cards.length === 10) box.classList.add('is-complete');
+        } else {
+          cardsHost.appendChild(Cards.renderSlot('1', 'md'));
+        }
+        box.appendChild(cardsHost);
 
-      host.appendChild(box);
+        /* progress ticks */
+        var ticks = el('div', 'dutch-ticks');
+        for (var i = 1; i <= 10; i++) {
+          ticks.appendChild(el('span', 'tick' + (i <= pile.cards.length ? ' on' : '')));
+        }
+        box.appendChild(ticks);
+        piles.appendChild(box);
+      });
+
+      group.appendChild(piles);
+      group.appendChild(el('div', 'dutch-group-label', Cards.COLOR_LABEL[color]));
+      host.appendChild(group);
     });
   }
 

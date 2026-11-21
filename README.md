@@ -31,7 +31,7 @@ A local server is recommended over opening the file directly, so the Google Font
 | **Post piles** | 3 × 1 | Built **down** in alternating *boy* / *girl* colours. |
 | **Wood pile** | 27 | Turned over **three at a time**; only the top turned card is playable. |
 
-**The centre — Dutch piles.** Four shared piles (one per colour) built **1 → 10 in the same colour**. Any player may add to any pile at any time.
+**The centre — Dutch piles.** Twelve shared piles (**three per colour**), each built **1 → 10 in the same colour**. Two cards of the same value (two red 1s, say) start separate piles instead of stacking. Any player may add to any pile at any time.
 
 **Colour genders.** Post piles must alternate between the two groups:
 

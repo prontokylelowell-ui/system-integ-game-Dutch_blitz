@@ -35,21 +35,18 @@
     return out;
   }
 
-  /* A card may go to the centre Dutch pile of its own colour when it is
-     exactly one higher than the pile's current top (1 → 10, same colour). */
-  function canPlayToDutch(game, card) {
-    if (!card) return false;
-    var pile = game.dutch[card.color];
-    return pile.length + 1 === card.value;
-  }
-
-  function dutchTop(game, color) {
-    var pile = game.dutch[color];
-    return pile.length ? pile[pile.length - 1] : null;
-  }
-
-  function dutchComplete(game, color) {
-    return game.dutch[color].length === 10;
+  /* The centre holds several Dutch piles per colour, so two cards of the same
+     value (two 1s, say) can open two separate piles instead of stacking.
+     A card fits a pile of its own colour when it is exactly one higher than
+     that pile's current top (1 → 10, same colour). Returns the pile index,
+     or -1 when no pile of that colour is ready for the card. */
+  function findDutchPile(game, card) {
+    if (!card) return -1;
+    for (var i = 0; i < game.dutch.length; i++) {
+      var pile = game.dutch[i];
+      if (pile.color === card.color && pile.cards.length + 1 === card.value) return i;
+    }
+    return -1;
   }
 
   /* A card may go onto a Post pile when it is exactly one lower than the
@@ -70,11 +67,13 @@
     var moves = [];
     var i, j, src, card;
 
-    /* 1. Moves into the shared Dutch piles. */
+    /* 1. Moves into the shared Dutch piles. A card can only fit one pile per
+       colour, so at most one Dutch move is offered per source. */
     for (i = 0; i < sources.length; i++) {
       src = sources[i];
       card = getSourceCard(player, src);
-      if (canPlayToDutch(game, card)) moves.push({ kind: 'dutch', from: src });
+      var pileIndex = findDutchPile(game, card);
+      if (pileIndex >= 0) moves.push({ kind: 'dutch', from: src, to: pileIndex });
     }
 
     /* 2. Moves between stacks (into a Post pile). */
@@ -106,10 +105,8 @@
   global.DBRules = {
     getSourceCard: getSourceCard,
     listSources: listSources,
-    canPlayToDutch: canPlayToDutch,
+    findDutchPile: findDutchPile,
     canPlayToPost: canPlayToPost,
-    dutchTop: dutchTop,
-    dutchComplete: dutchComplete,
     listMoves: listMoves,
     hasAnyMove: hasAnyMove,
     hasBlitzed: hasBlitzed
