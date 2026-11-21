@@ -143,6 +143,26 @@
 .hud-chip-quiet { color: rgba(247, 241, 225, 0.6); font-weight: 500; }
 .hud-chip-score { color: var(--gold); }
 
+/* ---------- Boy / girl colour legend ---------- */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.1rem;
+  padding: 0.34rem 1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.72rem;
+  color: rgba(247, 241, 225, 0.62);
+}
+.legend-title { text-transform: uppercase; letter-spacing: 0.09em; font-weight: 600; }
+.legend-item { display: inline-flex; align-items: center; gap: 0.3rem; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.legend-dot.d-red    { background: var(--red); }
+.legend-dot.d-blue   { background: var(--blue); }
+.legend-dot.d-green  { background: var(--green); }
+.legend-dot.d-yellow { background: var(--yellow); }
+
 /* ---------- Opponents ---------- */
 .opponents {
   display: flex;
@@ -278,6 +298,23 @@
 }
 .pile-sub { font-size: 0.64rem; color: rgba(247, 241, 225, 0.45); }
 
+/* Stack-depth badge on the player's own Post piles */
+.pile-count {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  z-index: 3;
+  min-width: 17px;
+  text-align: center;
+  font-size: 0.64rem;
+  font-weight: 700;
+  padding: 0.05rem 0.28rem;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #2a2109;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
 /* The Blitz pile: a face-down stack with the face-up card sitting on top */
 .pile-blitz .pile-cards > .card-back { position: absolute; top: -5px; left: 5px; z-index: 1; }
 .pile-blitz .pile-cards > .card:not(.card-back) { position: relative; z-index: 2; }
@@ -361,4 +398,5 @@
 @media (max-height: 720px) {
   .card.size-md { --w: clamp(40px, 5.5vw, 62px); }
   .card.size-lg { --w: clamp(38px, 5vw, 58px); }
+  .legend { display: none; }
 }

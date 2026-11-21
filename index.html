@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dutch Blitz — Real-Time Card Race</title>
   <meta name="description" content="Dutch Blitz: a real-time, Pennsylvania Dutch racing card game. Clear your Blitz pile before three AI opponents clear theirs. Playable in any modern browser." />
+  <meta name="theme-color" content="#131f1a" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Dutch Blitz — Real-Time Card Race" />
+  <meta property="og:description" content="A real-time, browser-based Dutch Blitz card game. Race up to three AI opponents to clear your Blitz pile first. Built with vanilla HTML, CSS and JavaScript." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131f1a'/%3E%3Crect x='4.5' y='4.5' width='23' height='23' rx='4' fill='none' stroke='%23d8a94a' stroke-width='2.4'/%3E%3Ctext x='16' y='22.5' font-family='Georgia,serif' font-size='16' font-weight='700' text-anchor='middle' fill='%23d8a94a'%3ED%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -137,7 +144,7 @@
           <span class="hud-chip" id="hud-round">Round 1</span>
           <span class="hud-chip hud-chip-quiet" id="hud-target">First to 75</span>
         </div>
-        <div class="hud-center"><span id="hud-status">Get ready</span></div>
+        <div class="hud-center"><span id="hud-status" aria-live="polite">Get ready</span></div>
         <div class="hud-right">
           <span class="hud-chip hud-chip-score" id="hud-score">0 pts</span>
           <button type="button" class="btn btn-icon" id="btn-game-sound" aria-pressed="true" aria-label="Toggle sound">
@@ -150,6 +157,12 @@
           <button type="button" class="btn" id="btn-pause">Pause</button>
         </div>
       </header>
+
+      <div class="legend" aria-label="Post pile colour groups">
+        <span class="legend-title">Post piles alternate</span>
+        <span class="legend-item"><i class="legend-dot d-blue"></i><i class="legend-dot d-red"></i> boys</span>
+        <span class="legend-item"><i class="legend-dot d-green"></i><i class="legend-dot d-yellow"></i> girls</span>
+      </div>
 
       <div class="opponents" id="opponents" aria-label="Opponents"></div>
 

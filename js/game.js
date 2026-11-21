@@ -20,6 +20,7 @@
   var countdownTimer = null;
   var lastConfig = { opponents: 3, difficulty: 'normal' };
   var roundStats = { blitzes: 0 };
+  var countingDown = false;
 
   function $(id) { return document.getElementById(id); }
   function el(tag, cls, text) { return Cards.el(tag, cls, text); }
@@ -58,7 +59,8 @@
     var me = game.players[0];
     $('hud-score').textContent = me.totalScore + ' pts';
     var status = $('hud-status');
-    if (game.phase === 'playing') status.textContent = running ? 'Race in progress' : 'Paused';
+    if (countingDown) status.textContent = 'Get ready';
+    else if (game.phase === 'playing') status.textContent = running ? 'Race in progress' : 'Paused';
     else if (game.phase === 'roundOver') status.textContent = 'Round complete';
     else if (game.phase === 'gameOver') status.textContent = 'Game over';
     else status.textContent = 'Get ready';
@@ -162,6 +164,7 @@
         build: function (h) {
           if (post.top) h.appendChild(Cards.renderCard(post.top, { size: 'lg', playable: true }));
           else h.appendChild(Cards.renderSlot('empty', 'lg'));
+          if (post.count > 1) h.appendChild(el('span', 'pile-count', String(post.count)));
         }
       }));
     });
@@ -217,7 +220,7 @@
   function renderHint() {
     var hint = $('hint');
     if (!hint) return;
-    if (game.phase !== 'playing') { hint.textContent = ''; return; }
+    if (game.phase !== 'playing' || countingDown) { hint.textContent = ''; return; }
     if (!running) { hint.textContent = 'Paused'; return; }
     hint.textContent = 'Click a card to play it · Click your Wood pile (or press Space) to turn cards over';
   }
@@ -350,9 +353,11 @@
     if (countdownTimer) clearTimeout(countdownTimer);
 
     Engine.startRound(game);
+    countingDown = true;
     render();
 
     runCountdown(function () {
+      countingDown = false;
       game.progressAt = Date.now();
       AI.arm(bots, Date.now());
       running = true;
@@ -392,6 +397,7 @@
     if (countdownTimer) clearTimeout(countdownTimer);
     hideOverlay();
     $('countdown').hidden = true;
+    countingDown = false;
     game = null;
     if (global.DBApp) global.DBApp.showScreen('menu');
   }
